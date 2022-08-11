@@ -1,0 +1,30 @@
+
+.text-decorator-none{
+    text-decoration: none;
+}
+
+.box-card-post{
+    display: flex;
+    margin-top: 15px;
+    max-width: 20%;
+    max-height: auto!important;
+    margin-right: 10px;
+}
+
+.box-button{
+    display: flex;
+    justify-content: space-between!important;
+}
+
+.botao-atualizar{
+    margin-right: 15px;
+}
+
+.grid-container-posts{
+    display: flex;
+    max-width: 1120px;
+    margin: 0 auto!important;
+    justify-content: flex-start;
+    padding: 1rem;
+    flex-wrap: wrap;
+}

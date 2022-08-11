@@ -1,15 +1,59 @@
 import { Grid, Box, Typography, TextField, Button } from "@mui/material";
-import React from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import "./Login.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import UserLogin from "../../models/UserLogin";
+import { login } from "../../services/Service";
+import { useDispatch } from "react-redux";
+import { addToken } from "../../store/tokens/actions";
 
 function Login() {
+
+    let history = useNavigate();
+    const dispatch = useDispatch();
+    const [token, setToken] = useState("");
+    const [userLogin, setUserLogin] = useState<UserLogin>({
+        id: 0,
+        nome: '',
+        usuario: '',
+        senha: '',
+        foto: '',
+        token: ''
+    });
+
+
+
+    function updatedModel(e: ChangeEvent<HTMLInputElement>) {
+        const { name, value } = e.target;
+        setUserLogin({
+            ...userLogin,
+            [e.target.name]: e.target.value
+        });
+    }
+
+    async function onSubmit(e: ChangeEvent<HTMLFormElement>) {
+        e.preventDefault();
+        try {
+            await login(`/usuarios/logar`, userLogin, setToken);
+            alert("Login realizado com sucesso!");
+        } catch (error) {
+            alert('Dados do usuario incorretos!');
+        }
+    }
+
+    useEffect(() => {
+        if (token != "") {
+            dispatch(addToken(token))
+            history("/home");
+        }
+    }, [token]);
+
     return (
         <>
-            <Grid container direction='row' justifyContent='center' alignItems='center'>{/*style={{ backgroundColor: "#222", color: "white", minHeight:"70vh"}} */}
+            <Grid container direction='row' justifyContent='center' alignItems='center' >{/*style={{ backgroundColor: "#222", color: "white", minHeight:"70vh"}} */}
                 <Grid alignItems='center' xs={6}>
                     <Box paddingX={20} >
-                        <form>
+                        <form onSubmit={onSubmit} >
                             <Typography
                                 variant="h3"
                                 gutterBottom
@@ -20,21 +64,23 @@ function Login() {
                             >
                                 Entrar
                             </Typography>
-                            <TextField id='usuario' label='Usuário' variant='outlined' name='usuario' margin='normal' fullWidth />
-                            <TextField id='senha' label='Senha' variant='outlined' name='senha' type='password' margin='normal' fullWidth />
+                            <TextField value={userLogin.usuario} onChange={(e: ChangeEvent<HTMLInputElement>) => updatedModel(e)} id='usuario' label='Usuário' variant='outlined' name='usuario' margin='normal' fullWidth />
+                            <TextField value={userLogin.senha} onChange={(e: ChangeEvent<HTMLInputElement>) => updatedModel(e)} id='senha' label='Senha' variant='outlined' name='senha' type='password' margin='normal' fullWidth />
                             <Box textAlign='center'  >
-                                <Link to={"/home"} className='text-decorator-none'>
-                                    <Button type='submit' variant='contained' color="primary" fullWidth >
-                                        Logar
-                                    </Button>
-                                </Link>
+
+                                <Button type='submit' variant='contained' color="primary" fullWidth >
+                                    Logar
+                                </Button>
+
                             </Box>
                         </form>
                         <Box display='flex' justifyContent='center' marginTop={2}>
                             <Box marginRight={1}>
                                 <Typography variant='subtitle1' gutterBottom alignItems='center' >Não tem uma conta ?</Typography>
                             </Box>
-                            <Typography variant='subtitle1' gutterBottom alignItems='center' className="textos1" >Cadastre-se</Typography>
+                            <Link to={"/cadastrousuario"}>
+                                <Typography variant='subtitle1' gutterBottom alignItems='center' className="textos1" >Cadastre-se</Typography>
+                            </Link>
                         </Box>
                     </Box>
                 </Grid>

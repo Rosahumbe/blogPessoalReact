@@ -1,0 +1,24 @@
+.text-decorator-none{
+    text-decoration: none;
+}
+.container-tema{
+    display: flex;
+    padding: 3rem;
+    gap: 1rem;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+.box-tema{
+    display: flex;
+    margin-top: 15px;
+    max-width: 20%;
+    height: auto!important;
+}
+.box-tema-botoes{
+    display: flex;
+
+}
+
+.botao-atualizar{
+    margin-right: 10px!important;
+}
